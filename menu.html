@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Menu — Mighty Thunder Kitchen</title>
+  <meta name="description" content="Build your perfect bowl. Stir-fry, salads, thunder bowls, and sides — all made fresh to order at Mighty Thunder Kitchen." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    img { display: block; max-width: 100%; }
+    ul { list-style: none; }
+    a { text-decoration: none; color: inherit; }
+    button { font: inherit; cursor: pointer; border: none; background: none; }
+
+    /* ── Design Tokens ── */
+    :root {
+      --bg:           #0F0F0F;
+      --bg-2:         #141414;
+      --bg-3:         #1A1A1A;
+      --bg-light:     #F5F0E8;
+      --amber:        #D4841A;
+      --amber-light:  #E8A040;
+      --amber-dark:   #B36A10;
+      --amber-glow:   rgba(212,132,26,0.15);
+      --cream:        #F5F0E8;
+      --cream-dim:    rgba(245,240,232,0.65);
+      --cream-faint:  rgba(245,240,232,0.25);
+      --ink:          #0F0F0F;
+      --muted:        #7A7068;
+      --line-dark:    rgba(245,240,232,0.08);
+      --line-amber:   rgba(212,132,26,0.20);
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body:    'Inter', system-ui, sans-serif;
+      --ease-out:     cubic-bezier(0.22,1,0.36,1);
+      --nav-h:        70px;
+    }
+
+    /* ── Base ── */
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--cream);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── Container ── */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+
+    /* ── Buttons ── */
+    .btn-primary {
+      display: inline-block;
+      background: var(--amber);
+      color: var(--ink);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.75rem 1.6rem;
+      border-radius: 2px;
+      transition: background 0.25s, transform 0.2s;
+    }
+    .btn-primary:hover { background: var(--amber-light); transform: translateY(-2px); }
+
+    /* ── Scroll Reveal ── */
+    .reveal, .reveal-left, .reveal-right, .reveal-scale {
+      opacity: 0;
+      transition: opacity 0.75s var(--ease-out), transform 0.75s var(--ease-out);
+    }
+    .reveal          { transform: translateY(40px); }
+    .reveal-left     { transform: translateX(-40px); }
+    .reveal-right    { transform: translateX(40px); }
+    .reveal-scale    { transform: scale(0.93); }
+    .reveal.visible, .reveal-left.visible, .reveal-right.visible, .reveal-scale.visible {
+      opacity: 1; transform: none;
+    }
+    .stagger > *:nth-child(1) { transition-delay: 0s; }
+    .stagger > *:nth-child(2) { transition-delay: 0.06s; }
+    .stagger > *:nth-child(3) { transition-delay: 0.12s; }
+    .stagger > *:nth-child(4) { transition-delay: 0.18s; }
+    .stagger > *:nth-child(5) { transition-delay: 0.24s; }
+    .stagger > *:nth-child(6) { transition-delay: 0.30s; }
+
+    /* ════════════════════════════════════════════
+       NAV
+    ════════════════════════════════════════════ */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.4rem 2.5rem;
+      background: rgba(15,15,15,0.96);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line-amber);
+      transition: padding 0.3s ease;
+    }
+    .nav.scrolled { padding: 1rem 2.5rem; }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      display: flex;
+      align-items: baseline;
+      gap: 0.3rem;
+    }
+    .logo-thunder { color: var(--amber); font-style: italic; }
+    .logo-kitchen { font-size: 0.65rem; font-style: normal; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; color: var(--cream-dim); margin-left: 0.15rem; }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2.2rem;
+    }
+    .nav-links a {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--cream-dim);
+      position: relative;
+      transition: color 0.25s;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0;
+      width: 0; height: 1px;
+      background: var(--amber);
+      transition: width 0.3s var(--ease-out);
+    }
+    .nav-links a:hover, .nav-links a.nav-active { color: var(--cream); }
+    .nav-links a:hover::after, .nav-links a.nav-active::after { width: 100%; }
+    .nav-cta {
+      background: var(--amber) !important;
+      color: var(--ink) !important;
+      padding: 0.6rem 1.4rem;
+      border-radius: 2px;
+      font-weight: 600 !important;
+      transition: background 0.25s, transform 0.2s !important;
+    }
+    .nav-cta::after { display: none !important; }
+    .nav-cta:hover { background: var(--amber-light) !important; transform: translateY(-1px); color: var(--ink) !important; }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      padding: 4px;
+      z-index: 1001;
+    }
+    .hamburger span {
+      display: block;
+      width: 22px; height: 1.5px;
+      background: var(--cream);
+      transition: all 0.3s ease;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15,15,15,0.98);
+      z-index: 999;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2.2rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-style: italic;
+      color: var(--cream-dim);
+      transition: color 0.2s;
+    }
+    .mobile-menu a:hover { color: var(--amber); }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+    }
+
+    /* ════════════════════════════════════════════
+       MENU HERO BANNER
+    ════════════════════════════════════════════ */
+    .menu-hero {
+      position: relative;
+      height: 42vh;
+      min-height: 320px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      margin-top: var(--nav-h);
+    }
+    .menu-hero-bg {
+      position: absolute;
+      inset: 0;
+      background: url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1600&q=80') center/cover no-repeat;
+    }
+    .menu-hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(15,15,15,0.55) 0%,
+        rgba(15,15,15,0.75) 100%
+      );
+    }
+    .menu-hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 2rem;
+    }
+    .hero-eyebrow {
+      font-size: 0.62rem;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.9rem;
+    }
+    .menu-hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 700;
+      color: var(--cream);
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+    }
+    .menu-hero-sub {
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--cream-dim);
+      margin-top: 0.9rem;
+    }
+
+    /* ════════════════════════════════════════════
+       CATEGORY TABS
+    ════════════════════════════════════════════ */
+    .menu-tabs-wrap {
+      position: sticky;
+      top: var(--nav-h);
+      background: var(--bg-2);
+      z-index: 100;
+      border-bottom: 1px solid var(--line-dark);
+    }
+    .menu-tabs {
+      display: flex;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 0 2rem;
+      scrollbar-width: none;
+    }
+    .menu-tabs::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      flex-shrink: 0;
+      padding: 1.1rem 1.8rem;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--cream-dim);
+      border-bottom: 2px solid transparent;
+      transition: color 0.25s, border-color 0.25s;
+      white-space: nowrap;
+    }
+    .tab-btn:hover { color: var(--cream); }
+    .tab-btn.active {
+      color: var(--cream);
+      border-bottom-color: var(--amber);
+    }
+
+    /* ════════════════════════════════════════════
+       MENU SECTIONS & GRID
+    ════════════════════════════════════════════ */
+    .menu-sections { background: var(--bg); min-height: 60vh; }
+
+    .menu-panel { padding: 3.5rem 0; }
+    .menu-panel[hidden] { display: none; }
+
+    .menu-panel-header {
+      margin-bottom: 2.5rem;
+    }
+    .menu-panel-title {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--cream);
+    }
+    .menu-panel-sub {
+      font-size: 0.82rem;
+      color: var(--cream-dim);
+      margin-top: 0.4rem;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    @media (max-width: 900px) { .menu-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px) { .menu-grid { grid-template-columns: 1fr; } }
+
+    .menu-card {
+      background: var(--bg-3);
+      border: 1px solid var(--line-dark);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.35s var(--ease-out), border-color 0.35s, box-shadow 0.35s;
+    }
+    .menu-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--line-amber);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+    }
+    .menu-card-img-wrap {
+      aspect-ratio: 16/9;
+      overflow: hidden;
+      position: relative;
+    }
+    .menu-card-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s var(--ease-out);
+    }
+    .menu-card:hover .menu-card-img-wrap img { transform: scale(1.06); }
+
+    .menu-card-body {
+      padding: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .menu-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 0.6rem;
+    }
+    .menu-card-name {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--cream);
+      line-height: 1.3;
+    }
+    .menu-card-badges { display: flex; gap: 0.4rem; flex-shrink: 0; margin-top: 2px; }
+    .diet-badge {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      font-size: 0.58rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .diet-badge.vegan {
+      background: rgba(80,180,80,0.12);
+      color: #4CAF50;
+      border: 1px solid rgba(80,180,80,0.3);
+    }
+    .diet-badge.gf {
+      background: var(--amber-glow);
+      color: var(--amber);
+      border: 1px solid var(--line-amber);
+    }
+    .menu-card-desc {
+      font-size: 0.8rem;
+      color: var(--cream-dim);
+      line-height: 1.65;
+      flex: 1;
+    }
+    .menu-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 1.2rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--line-dark);
+    }
+    .menu-card-cal {
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+    .menu-order-btn {
+      font-size: 0.62rem;
+      padding: 0.55rem 1.2rem;
+      letter-spacing: 0.12em;
+    }
+
+    /* ════════════════════════════════════════════
+       FOOTER
+    ════════════════════════════════════════════ */
+    .footer { background: #080808; padding: 4rem 0 2rem; }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 5rem;
+      margin-bottom: 3rem;
+      padding-bottom: 3rem;
+      border-bottom: 1px solid var(--line-dark);
+    }
+    @media (max-width: 768px) { .footer-top { grid-template-columns: 1fr; gap: 2.5rem; } }
+    .footer-logo {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-style: italic;
+      font-weight: 600;
+      color: var(--cream);
+      margin-bottom: 0.4rem;
+    }
+    .footer-logo span { color: var(--amber); }
+    .footer-tagline {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.2rem;
+    }
+    .footer-socials { display: flex; gap: 0.8rem; }
+    .footer-social-link {
+      width: 34px; height: 34px;
+      border: 1px solid var(--line-dark);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.25s, background 0.25s;
+    }
+    .footer-social-link:hover { border-color: var(--amber); background: var(--amber-glow); }
+    .footer-social-link svg { width: 14px; height: 14px; stroke: var(--cream-dim); fill: none; stroke-width: 1.5; }
+    .footer-nav {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+    @media (max-width: 480px) { .footer-nav { grid-template-columns: 1fr 1fr; } }
+    .footer-col-title {
+      font-size: 0.58rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 1rem;
+    }
+    .footer-col ul { display: flex; flex-direction: column; gap: 0.6rem; }
+    .footer-col a { font-size: 0.78rem; color: var(--cream-dim); transition: color 0.2s; }
+    .footer-col a:hover { color: var(--cream); }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .footer-copy { font-size: 0.62rem; color: var(--cream-faint); }
+    .footer-legal { display: flex; gap: 1.5rem; }
+    .footer-legal a { font-size: 0.62rem; color: var(--cream-faint); transition: color 0.2s; }
+    .footer-legal a:hover { color: var(--cream-dim); }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAV ── -->
+  <nav class="nav" id="navbar" role="navigation" aria-label="Main navigation">
+    <a href="index.html" class="nav-logo">
+      Mighty&nbsp;<span class="logo-thunder">Thunder</span><span class="logo-kitchen">Kitchen</span>
+    </a>
+    <ul class="nav-links" role="list">
+      <li><a href="menu.html" class="nav-active">Menu</a></li>
+      <li><a href="index.html#catering">Catering</a></li>
+      <li><a href="index.html#rewards">Rewards</a></li>
+      <li><a href="#">Locations</a></li>
+      <li><a href="#" class="nav-cta">Order Now</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile navigation">
+    <a href="menu.html"       class="mobile-link">Menu</a>
+    <a href="index.html#catering" class="mobile-link">Catering</a>
+    <a href="index.html#rewards"  class="mobile-link">Rewards</a>
+    <a href="#"               class="mobile-link">Locations</a>
+    <a href="#"               class="mobile-link">Order Now</a>
+  </nav>
+
+  <!-- ── MENU HERO BANNER ── -->
+  <section class="menu-hero" aria-label="Menu header">
+    <div class="menu-hero-bg"></div>
+    <div class="menu-hero-content">
+      <p class="hero-eyebrow">Mighty Thunder Kitchen</p>
+      <h1 class="menu-hero-title">Build Your Bowl</h1>
+      <p class="menu-hero-sub">Everything made to order &mdash; every time</p>
+    </div>
+  </section>
+
+  <!-- ── CATEGORY TABS ── -->
+  <div class="menu-tabs-wrap">
+    <div class="menu-tabs" role="tablist" aria-label="Menu categories">
+      <button class="tab-btn active" role="tab" aria-selected="true"  data-tab="stir-fry"     id="tab-stir-fry">Stir-Fry</button>
+      <button class="tab-btn"        role="tab" aria-selected="false" data-tab="salads"        id="tab-salads">Salads</button>
+      <button class="tab-btn"        role="tab" aria-selected="false" data-tab="thunder-bowl"  id="tab-thunder-bowl">Thunder Bowl</button>
+      <button class="tab-btn"        role="tab" aria-selected="false" data-tab="sides"         id="tab-sides">Sides</button>
+    </div>
+  </div>
+
+  <!-- ── MENU PANELS ── -->
+  <main class="menu-sections">
+
+    <!-- STIR-FRY -->
+    <section class="menu-panel" id="panel-stir-fry" role="tabpanel" aria-labelledby="tab-stir-fry">
+      <div class="container">
+        <div class="menu-panel-header">
+          <h2 class="menu-panel-title">Stir-Fry</h2>
+          <p class="menu-panel-sub">Choose wheat or rice noodles &bull; all items made to order</p>
+        </div>
+        <div class="menu-grid stagger">
+
+          <article class="menu-card reveal-scale">
+            <div class="menu-card-img-wrap">
+              <img src="https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=600&q=75" alt="Thunderclap Noodles" loading="lazy" decoding="async" />
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-top">
+                <h3 class="menu-card-name">Thunderclap Noodles</h3>
+                <div class="menu-card-badges"><span class="diet-badge vegan" title="Vegan option">V</span></div>
+              </div>
+              <p class="menu-card-desc">Wheat noodles, charred broccoli, snap peas, shiitake mushrooms, scallions, thunder sauce.</p>
+              <div class="menu-card-footer">
+                <span class="menu-card-cal">580 cal</span>
+                <a href="#" class="btn-primary menu-order-btn">Order</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="menu-card reveal-scale">
+            <div class="menu-card-img-wrap">
+              <img src="https://images.unsplash.com/photo-1585032226651-759b368d7246?w=600&q=75" alt="Ginger Garlic Lo Mein" loading="lazy" decoding="async" />
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-top">
+                <h3 class="menu-card-name">Ginger Garlic Lo Mein</h3>
+                <div class="menu-card-badges">
+                  <span class="diet-badge vegan" title="Vegan option">V</span>
+                  <span class="diet-badge gf" title="Gluten-free option">GF</span>
+                </div>
+              </div>
+              <p class="menu-card-desc">Rice noodles, bok choy, edamame, crispy shallots, sesame seeds, ginger garlic sauce.</p>
+              <div class="menu-card-footer">
+                <span class="menu-card-cal">520 cal</span>
+                <a href="#" class="btn-primary menu-order-btn">Order</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="menu-card reveal-scale">
+            <div class="menu-card-img-wrap">
+              <img src="https://images.unsplash.com/photo-1559314809-0d155014e29e?w=600&q=75" alt="Pad Thai Classic" loading="lazy" decoding="async" />
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-top">
+                <h3 class="menu-card-name">Pad Thai Classic</h3>
+                <div class="menu-card-badges"><span class="diet-badge gf" title="Gluten-free">GF</span></div>
+              </div>
+              <p class="menu-card-desc">Thin rice noodles, bean sprouts, egg, crushed peanuts, lime, tamarind pad thai sauce.</p>
+              <div class="menu-card-footer">
+                <span class="menu-card-cal">610 cal</span>
+                <a href="#" class="btn-primary menu-order-btn">Order</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="menu-card reveal-scale">
+            <div class="menu-card-img-wrap">
+              <img src="https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=600&q=75" alt="Spicy Szechuan Noodles" loading="lazy" decoding="async" />
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-top">
+                <h3 class="menu-card-name">Spicy Szechuan Noodles</h3>
+                <div class="menu-card-badges"><span class="diet-badge vegan" title="Vegan">V</span></div>
+              </div>
+              <p class="menu-card-desc">Wheat noodles, chili crisp, Szechuan peppercorn, cucumber ribbons, scallions, sesame oil.</p>
+              <div class="menu-card-footer">
+                <span class="menu-card-cal">545 cal</span>
+                <a href="#" class="btn-primary menu-order-btn">Order</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="menu-card reveal-scale">
+            <div class="menu-card-img-wrap">
+              <img src="https://images.unsplash.com/photo-1585032226651-759b368d7246?w=600&q=75" alt="Coconut Curry Noodles" loading="lazy" decoding="async" />
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-top">
+                <h3 class="menu-card-name">Coconut Curry Noodles</h3>
+                <div class="menu-card-badges">
+                  <span class="diet-badge vegan" title="Vegan">V</span>
+                  <span class="diet-badge gf" title="Gluten-free">GF</span>
+                </div>
+              </div>
+              <p class="menu-card-desc">Rice noodles, coconut green curry broth, baby spinach, roasted sweet potato, lime leaf.</p>
+              <div class="menu-card-footer">
+                <span class="menu-card-cal">490 cal</span>
+                <a href="#" class="btn-primary menu-order-btn">Order</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="menu-card reveal-scale">
+            <div class="menu-card-img-wrap">
+              <img src="https://images.unsplash.com/photo-1559314809-0d155014e29e?w=600&q=75" alt="Sesame Teriyaki" loading="lazy" decoding="async" />
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-top">
+                <h3 class="menu-card-name">Sesame Teriyaki</h3>
+                <div class="menu-card-badges"><span class="diet-badge gf" title="Gluten-free">GF</span></div>
+              </div>
+              <p class="menu-card-desc">Rice noodles, broccolini, snap peas, carrots, sesame teriyaki glaze, toasted sesame seeds.</p>
+              <div class="menu-card-footer">
+                <span class="menu-card-cal">555 cal</span>
+                <a href="#" class="btn-primary menu-order-btn">Order</a>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SALADS -->
+    <section class="menu-panel" id="panel-salads" role="tabpanel" aria-labelledby="tab-salads" hidden>
+      <div class="container">
+        <div class="menu-panel-header">
+          <h2 class="menu-panel-title">Salads</h2>
+          <p class="menu-panel-sub">Fresh greens, bold dressings &bull; customize every bowl</p>
+        </div>
+        <div class="menu-grid stagger">
+
+          <article class="menu-card reveal-scale">
+            <div class="menu-card-img-wrap">
+              <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&q=75" alt="Storm Season Salad" loading="lazy" decoding="async" />
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-top">
+                <h3 class="menu-card-name">Storm Season Salad</h3>
+                <div class="menu-card-badges">
+                  <span class="diet-badge vegan" title="Vegan">V</span>
+                  <span class="diet-badge gf" title="Gluten-free">GF</span>
+                </div>
+              </div>
+              <p class="menu-card-desc">Kale, shredded cabbage, edamame, roasted sesame seeds, crispy wontons, miso ginger dressing.</p>
+              <div class="menu-card-footer">
+                <span class="menu-card-cal">410 cal</span>
+                <a href="#" class="btn-primary menu-order-btn">Order</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="menu-card reveal-scale">
+            <div class="menu-card-img-wrap">
+              <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?w=600&q=75" alt="Lemon Kale Power" loading="lazy" decoding="async" />
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-top">
+                <h3 class="menu-card-name">Lemon Kale Power</h3>
+                <div class="menu-card-badges">
+                  <span class="diet-badge vegan" title="Vegan">V</span>
+                  <span class="diet-badge gf" title="Gluten-free">GF</span>
+                </div>
+              </div>
+              <p class="menu-card-desc">Massaged kale, chickpeas, roasted red pepper, avocado, lemon tahini, everything bagel crunch.</p>
+              <div class="menu-card-footer">
+                <span class="menu-card-cal">460 cal</span>
+                <a href="#" class="btn-primary menu-order-btn">Order</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="menu-card reveal-scale">
+            <div class="menu-card-img-wrap">
+              <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&q=75" alt="Mighty Green Crunch" loading="lazy" decoding="async" />
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-top">
+                <h3 class="menu-card-name">Mighty Green Crunch</h3>
+                <div class="menu-card-badges"><span class="diet-badge vegan" title="Vegan">V</span></div>
+              </div>
+              <p class="menu-card-desc">Mixed greens, granny smith apple, candied walnuts, dried cranberry, goat cheese, apple cider vinaigrette.</p>
+              <div class="menu-card-footer">
+                <span class="menu-card-cal">390 cal</span>
+                <a href="#" class="btn-primary menu-order-btn">Order</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="menu-card reveal-scale">
+            <div class="menu-card-img-wrap">
+              <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?w=600&q=75" alt="Thunder Caesar" loading="lazy" decoding="async" />
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-top">
+                <h3 class="menu-card-name">Thunder Caesar</h3>
+                <div class="menu-card-badges"></div>
+              </div>
+              <p class="menu-card-desc">Romaine hearts, parmesan crisp, sourdough croutons, white anchovy, house thunder caesar dressing.</p>
+              <div class="menu-card-footer">
+                <span class="menu-card-cal">480 cal</span>
+                <a href="#" class="btn-primary menu-order-btn">Order</a>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- THUNDER BOWL -->
+    <section class="menu-panel" id="panel-thunder-bowl" role="tabpanel" aria-labelledby="tab-thunder-bowl" hidden>
+      <div class="container">
+        <div class="menu-panel-header">
+          <h2 class="menu-panel-title">Thunder Bowl</h2>
+          <p class="menu-panel-sub">Grain-based bowls &bull; build on jasmine rice, farro, or quinoa</p>
+        </div>
+        <div class="menu-grid stagger">
+
+          <article class="menu-card reveal-scale">
+            <div class="menu-card-img-wrap">
+              <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=75" alt="Gold Rush Bowl" loading="lazy" decoding="async" />
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-top">
+                <h3 class="menu-card-name">Gold Rush Bowl</h3>
+                <div class="menu-card-badges">
+                  <span class="diet-badge vegan" title="Vegan">V</span>
+                  <span class="diet-badge gf" title="Gluten-free">GF</span>
+                </div>
+              </div>
+              <p class="menu-card-desc">Jasmine rice, roasted sweet potato, avocado, pickled cucumber, soft-boiled egg, toasted sesame.</p>
+              <div class="menu-card-footer">
+                <span class="menu-card-cal">620 cal</span>
+                <a href="#" class="btn-primary menu-order-btn">Order</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="menu-card reveal-scale">
+            <div class="menu-card-img-wrap">
+              <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=75" alt="Mighty Protein Bowl" loading="lazy" decoding="async" />
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-top">
+                <h3 class="menu-card-name">Mighty Protein Bowl</h3>
+                <div class="menu-card-badges"><span class="diet-badge gf" title="Gluten-free">GF</span></div>
+              </div>
+              <p class="menu-card-desc">Brown rice, grilled chicken or tofu, roasted broccolini, black beans, salsa verde, cotija.</p>
+              <div class="menu-card-footer">
+                <span class="menu-card-cal">680 cal</span>
+                <a href="#" class="btn-primary menu-order-btn">Order</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="menu-card reveal-scale">
+            <div class="menu-card-img-wrap">
+              <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=75" alt="Harvest Grain Bowl" loading="lazy" decoding="async" />
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-top">
+                <h3 class="menu-card-name">Harvest Grain Bowl</h3>
+                <div class="menu-card-badges">
+                  <span class="diet-badge vegan" title="Vegan">V</span>
+                </div>
+              </div>
+              <p class="menu-card-desc">Farro, roasted butternut squash, dried cranberries, toasted pepitas, arugula, maple dijon.</p>
+              <div class="menu-card-footer">
+                <span class="menu-card-cal">590 cal</span>
+                <a href="#" class="btn-primary menu-order-btn">Order</a>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SIDES -->
+    <section class="menu-panel" id="panel-sides" role="tabpanel" aria-labelledby="tab-sides" hidden>
+      <div class="container">
+        <div class="menu-panel-header">
+          <h2 class="menu-panel-title">Sides</h2>
+          <p class="menu-panel-sub">Perfect additions &bull; all made fresh</p>
+        </div>
+        <div class="menu-grid stagger">
+
+          <article class="menu-card reveal-scale">
+            <div class="menu-card-img-wrap">
+              <img src="https://images.unsplash.com/photo-1563245372-f21724e3856d?w=600&q=75" alt="Steamed Edamame" loading="lazy" decoding="async" />
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-top">
+                <h3 class="menu-card-name">Steamed Edamame</h3>
+                <div class="menu-card-badges">
+                  <span class="diet-badge vegan" title="Vegan">V</span>
+                  <span class="diet-badge gf" title="Gluten-free">GF</span>
+                </div>
+              </div>
+              <p class="menu-card-desc">Lightly salted edamame pods, sea salt, optional chili flake.</p>
+              <div class="menu-card-footer">
+                <span class="menu-card-cal">180 cal</span>
+                <a href="#" class="btn-primary menu-order-btn">Order</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="menu-card reveal-scale">
+            <div class="menu-card-img-wrap">
+              <img src="https://images.unsplash.com/photo-1563245372-f21724e3856d?w=600&q=75" alt="Pan-Fried Dumplings" loading="lazy" decoding="async" />
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-top">
+                <h3 class="menu-card-name">Pan-Fried Dumplings</h3>
+                <div class="menu-card-badges"><span class="diet-badge vegan" title="Vegan option">V</span></div>
+              </div>
+              <p class="menu-card-desc">4-piece pork or veggie dumplings, crispy bottom, ginger soy dipping sauce.</p>
+              <div class="menu-card-footer">
+                <span class="menu-card-cal">310 cal</span>
+                <a href="#" class="btn-primary menu-order-btn">Order</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="menu-card reveal-scale">
+            <div class="menu-card-img-wrap">
+              <img src="https://images.unsplash.com/photo-1563245372-f21724e3856d?w=600&q=75" alt="Miso Soup" loading="lazy" decoding="async" />
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-top">
+                <h3 class="menu-card-name">Miso Soup</h3>
+                <div class="menu-card-badges">
+                  <span class="diet-badge vegan" title="Vegan">V</span>
+                  <span class="diet-badge gf" title="Gluten-free">GF</span>
+                </div>
+              </div>
+              <p class="menu-card-desc">White miso broth, silken tofu, wakame, scallion, toasted sesame oil.</p>
+              <div class="menu-card-footer">
+                <span class="menu-card-cal">90 cal</span>
+                <a href="#" class="btn-primary menu-order-btn">Order</a>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── FOOTER ── -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="footer-logo">Mighty <span>Thunder</span> Kitchen</div>
+          <p class="footer-tagline">Fresh. Fast. Mighty.</p>
+          <div class="footer-socials">
+            <a href="#" class="footer-social-link" aria-label="Instagram">
+              <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+            </a>
+            <a href="#" class="footer-social-link" aria-label="TikTok">
+              <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.76a4.85 4.85 0 01-1.01-.07z"/></svg>
+            </a>
+            <a href="#" class="footer-social-link" aria-label="Facebook">
+              <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+            </a>
+          </div>
+        </div>
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <div class="footer-col">
+            <h4 class="footer-col-title">Eat</h4>
+            <ul>
+              <li><a href="menu.html">Menu</a></li>
+              <li><a href="index.html#catering">Catering</a></li>
+              <li><a href="#">Locations</a></li>
+              <li><a href="#">Gift Cards</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4 class="footer-col-title">Join</h4>
+            <ul>
+              <li><a href="index.html#rewards">Rewards</a></li>
+              <li><a href="#">Careers</a></li>
+              <li><a href="#">Franchise</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4 class="footer-col-title">Company</h4>
+            <ul>
+              <li><a href="#">Our Story</a></li>
+              <li><a href="#">Press</a></li>
+              <li><a href="#">Contact</a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">&copy; 2026 Mighty Thunder Kitchen LLC. All rights reserved.</p>
+        <div class="footer-legal">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Use</a>
+          <a href="#">Accessibility</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js" defer></script>
+</body>
+</html>

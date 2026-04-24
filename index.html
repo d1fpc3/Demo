@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Mighty Thunder Kitchen — Fresh Stir-Fry, Salads &amp; Thunder Bowls</title>
+  <meta name="description" content="Mighty Thunder Kitchen serves fresh, made-to-order stir-fry, salads, and thunder bowls. Fast, bold, and built your way." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    img { display: block; max-width: 100%; }
+    ul { list-style: none; }
+    a { text-decoration: none; color: inherit; }
+    button { font: inherit; cursor: pointer; border: none; background: none; }
+
+    /* ── Design Tokens ── */
+    :root {
+      --bg:           #0F0F0F;
+      --bg-2:         #141414;
+      --bg-3:         #1A1A1A;
+      --bg-light:     #F5F0E8;
+      --amber:        #D4841A;
+      --amber-light:  #E8A040;
+      --amber-dark:   #B36A10;
+      --amber-glow:   rgba(212,132,26,0.15);
+      --cream:        #F5F0E8;
+      --cream-dim:    rgba(245,240,232,0.65);
+      --cream-faint:  rgba(245,240,232,0.25);
+      --ink:          #0F0F0F;
+      --muted:        #7A7068;
+      --muted-light:  #9A8E82;
+      --line-dark:    rgba(245,240,232,0.08);
+      --line-amber:   rgba(212,132,26,0.20);
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body:    'Inter', system-ui, sans-serif;
+      --ease-out:     cubic-bezier(0.22,1,0.36,1);
+      --section-pad:  7rem;
+      --nav-h:        70px;
+    }
+    @media (max-width: 768px) {
+      :root { --section-pad: 4.5rem; }
+    }
+
+    /* ── Base ── */
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--cream);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── Container ── */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+
+    /* ── Buttons ── */
+    .btn-primary {
+      display: inline-block;
+      background: var(--amber);
+      color: var(--ink);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.9rem 2.2rem;
+      border-radius: 2px;
+      transition: background 0.25s, transform 0.2s;
+    }
+    .btn-primary:hover { background: var(--amber-light); transform: translateY(-2px); }
+
+    .btn-outline {
+      display: inline-block;
+      border: 1px solid var(--cream-faint);
+      color: var(--cream);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.9rem 2.2rem;
+      border-radius: 2px;
+      transition: border-color 0.25s, background 0.25s, transform 0.2s;
+    }
+    .btn-outline:hover {
+      border-color: var(--amber-light);
+      background: var(--amber-glow);
+      transform: translateY(-2px);
+    }
+
+    /* ── Section common ── */
+    .section { padding: var(--section-pad) 0; }
+    .section-tag {
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.75rem;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--cream);
+      margin-bottom: 1rem;
+    }
+    .section-title em { font-style: italic; color: var(--amber); }
+    .section-sub {
+      font-size: 0.95rem;
+      color: var(--cream-dim);
+      max-width: 560px;
+      line-height: 1.7;
+    }
+    .section-header { margin-bottom: 3.5rem; }
+
+    /* ── Scroll Reveal ── */
+    .reveal, .reveal-left, .reveal-right, .reveal-scale {
+      opacity: 0;
+      transition: opacity 0.75s var(--ease-out), transform 0.75s var(--ease-out);
+    }
+    .reveal          { transform: translateY(40px); }
+    .reveal-left     { transform: translateX(-40px); }
+    .reveal-right    { transform: translateX(40px); }
+    .reveal-scale    { transform: scale(0.93); }
+    .reveal.visible, .reveal-left.visible, .reveal-right.visible, .reveal-scale.visible {
+      opacity: 1; transform: none;
+    }
+    .stagger > *:nth-child(1) { transition-delay: 0s; }
+    .stagger > *:nth-child(2) { transition-delay: 0.08s; }
+    .stagger > *:nth-child(3) { transition-delay: 0.16s; }
+    .stagger > *:nth-child(4) { transition-delay: 0.24s; }
+    .stagger > *:nth-child(5) { transition-delay: 0.32s; }
+    .stagger > *:nth-child(6) { transition-delay: 0.40s; }
+
+    /* ════════════════════════════════════════════
+       NAV
+    ════════════════════════════════════════════ */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.4rem 2.5rem;
+      transition: background 0.4s ease, border-color 0.4s ease, padding 0.3s ease;
+    }
+    .nav.scrolled {
+      background: rgba(15,15,15,0.96);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line-amber);
+      padding: 1rem 2.5rem;
+    }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      display: flex;
+      align-items: baseline;
+      gap: 0.3rem;
+    }
+    .logo-thunder { color: var(--amber); font-style: italic; }
+    .logo-kitchen { font-size: 0.65rem; font-style: normal; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; color: var(--cream-dim); margin-left: 0.15rem; }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2.2rem;
+    }
+    .nav-links a {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--cream-dim);
+      position: relative;
+      transition: color 0.25s;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0;
+      width: 0; height: 1px;
+      background: var(--amber);
+      transition: width 0.3s var(--ease-out);
+    }
+    .nav-links a:hover, .nav-links a.nav-active { color: var(--cream); }
+    .nav-links a:hover::after, .nav-links a.nav-active::after { width: 100%; }
+    .nav-cta {
+      background: var(--amber) !important;
+      color: var(--ink) !important;
+      padding: 0.6rem 1.4rem;
+      border-radius: 2px;
+      font-weight: 600 !important;
+      transition: background 0.25s, transform 0.2s !important;
+    }
+    .nav-cta::after { display: none !important; }
+    .nav-cta:hover { background: var(--amber-light) !important; transform: translateY(-1px); color: var(--ink) !important; }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      padding: 4px;
+      z-index: 1001;
+    }
+    .hamburger span {
+      display: block;
+      width: 22px; height: 1.5px;
+      background: var(--cream);
+      transition: all 0.3s ease;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    /* Mobile overlay */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15,15,15,0.98);
+      z-index: 999;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2.2rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-style: italic;
+      color: var(--cream-dim);
+      transition: color 0.2s;
+    }
+    .mobile-menu a:hover { color: var(--amber); }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+    }
+
+    /* ════════════════════════════════════════════
+       HERO
+    ════════════════════════════════════════════ */
+    .hero {
+      position: relative;
+      height: 100svh;
+      min-height: 600px;
+      overflow: hidden;
+      perspective: 1200px;
+      perspective-origin: 50% 50%;
+    }
+    .hero-layer {
+      position: absolute;
+      inset: -10%;
+      will-change: transform;
+      transition: transform 0.14s var(--ease-out);
+    }
+    #hlBg {
+      background: url('https://images.unsplash.com/photo-1617093727343-374698b1b08d?w=1600&q=80') center/cover no-repeat;
+      transform: translateZ(-60px) scale(1.15);
+    }
+    #hlMid {
+      background: linear-gradient(
+        160deg,
+        rgba(15,15,15,0.78) 0%,
+        rgba(140,80,10,0.28) 50%,
+        rgba(15,15,15,0.88) 100%
+      );
+      transform: translateZ(-20px) scale(1.05);
+    }
+    #hlContent {
+      position: absolute;
+      inset: 10%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      transform: translateZ(40px);
+      animation: heroReveal 1s var(--ease-out) 0.15s both;
+      z-index: 10;
+    }
+    @keyframes heroReveal {
+      from { opacity: 0; transform: translateZ(80px) scale(0.92); }
+      to   { opacity: 1; transform: translateZ(40px) scale(1); }
+    }
+    .hero-eyebrow {
+      font-size: 0.62rem;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 1.2rem;
+    }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(3.5rem, 9vw, 7.5rem);
+      font-weight: 700;
+      line-height: 1.0;
+      color: var(--cream);
+      letter-spacing: -0.02em;
+      margin-bottom: 0.2rem;
+    }
+    .hero-title em { font-style: italic; color: var(--amber); }
+    .hero-divider {
+      width: 50px; height: 1px;
+      background: var(--amber);
+      margin: 1.4rem auto;
+      opacity: 0.6;
+    }
+    .hero-sub {
+      font-size: 0.8rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--cream-dim);
+      margin-bottom: 2.2rem;
+    }
+    .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+
+    /* Scroll indicator */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 10;
+    }
+    .scroll-line {
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, var(--amber), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50%       { opacity: 0.8; transform: scaleY(1.15); }
+    }
+    .scroll-text {
+      font-size: 0.55rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--cream-faint);
+    }
+
+    /* ════════════════════════════════════════════
+       TAGLINE STRIP
+    ════════════════════════════════════════════ */
+    .tagline-strip {
+      overflow: hidden;
+      background: var(--amber);
+      padding: 0.9rem 0;
+      white-space: nowrap;
+    }
+    .tagline-track {
+      display: inline-block;
+      animation: marquee 22s linear infinite;
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 700;
+      font-style: italic;
+      color: var(--ink);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .tagline-track .sep { margin: 0 1.5rem; opacity: 0.4; }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .tagline-track { animation: none; }
+    }
+
+    /* ════════════════════════════════════════════
+       FEATURED ITEMS
+    ════════════════════════════════════════════ */
+    .featured { background: var(--bg); }
+    .featured-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    @media (max-width: 900px) { .featured-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px) { .featured-grid { grid-template-columns: 1fr; } }
+
+    .featured-card {
+      background: var(--bg-3);
+      border: 1px solid var(--line-dark);
+      overflow: hidden;
+      transition: transform 0.35s var(--ease-out), border-color 0.35s, box-shadow 0.35s;
+    }
+    .featured-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--line-amber);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 0 1px var(--line-amber);
+    }
+    .featured-img-wrap {
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      position: relative;
+    }
+    .featured-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s var(--ease-out);
+    }
+    .featured-card:hover .featured-img-wrap img { transform: scale(1.06); }
+    .featured-badge {
+      position: absolute;
+      top: 1rem; left: 1rem;
+      background: var(--amber);
+      color: var(--ink);
+      font-size: 0.55rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.7rem;
+      border-radius: 2px;
+    }
+    .featured-body { padding: 1.6rem; }
+    .featured-tag {
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.5rem;
+    }
+    .featured-name {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--cream);
+      margin-bottom: 0.6rem;
+    }
+    .featured-desc {
+      font-size: 0.82rem;
+      color: var(--cream-dim);
+      line-height: 1.65;
+      margin-bottom: 1.2rem;
+    }
+    .featured-link {
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      padding: 0.65rem 1.5rem;
+    }
+
+    /* ════════════════════════════════════════════
+       CATERING
+    ════════════════════════════════════════════ */
+    .catering { background: var(--bg-2); }
+    .catering-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    @media (max-width: 768px) {
+      .catering-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    }
+    .catering-img-wrap {
+      position: relative;
+    }
+    .catering-img-wrap::before {
+      content: '';
+      position: absolute;
+      top: -12px; left: -12px;
+      width: 60px; height: 4px;
+      background: var(--amber);
+    }
+    .catering-img-wrap img {
+      width: 100%;
+      aspect-ratio: 4/5;
+      object-fit: cover;
+    }
+    .catering-text .section-title { margin-bottom: 1.2rem; }
+    .catering-text p {
+      font-size: 0.9rem;
+      color: var(--cream-dim);
+      line-height: 1.75;
+      margin-bottom: 1.5rem;
+    }
+    .catering-bullets {
+      margin-bottom: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .catering-bullets li {
+      font-size: 0.82rem;
+      color: var(--cream-dim);
+      padding-left: 1.2rem;
+      position: relative;
+    }
+    .catering-bullets li::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0.55em;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--amber);
+    }
+
+    /* ════════════════════════════════════════════
+       HOW IT WORKS
+    ════════════════════════════════════════════ */
+    .how-it-works { background: var(--bg); }
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      position: relative;
+    }
+    .steps-grid::before {
+      content: '';
+      position: absolute;
+      top: 90px; left: 20%; right: 20%;
+      height: 1px;
+      background: var(--line-amber);
+      pointer-events: none;
+    }
+    @media (max-width: 768px) {
+      .steps-grid { grid-template-columns: 1fr; }
+      .steps-grid::before { display: none; }
+    }
+    .step-card {
+      text-align: center;
+      padding: 3rem 2rem;
+      position: relative;
+    }
+    .step-num {
+      font-family: var(--font-display);
+      font-size: 5.5rem;
+      font-weight: 700;
+      color: rgba(212,132,26,0.06);
+      position: absolute;
+      top: 1.2rem; right: 1.5rem;
+      line-height: 1;
+      user-select: none;
+    }
+    .step-icon {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: var(--amber-glow);
+      border: 1px solid var(--line-amber);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+    }
+    .step-icon svg { width: 24px; height: 24px; stroke: var(--amber); stroke-width: 1.5; fill: none; }
+    .step-title {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--cream);
+      margin-bottom: 0.75rem;
+    }
+    .step-desc {
+      font-size: 0.83rem;
+      color: var(--cream-dim);
+      line-height: 1.7;
+      max-width: 240px;
+      margin: 0 auto;
+    }
+
+    /* ════════════════════════════════════════════
+       REWARDS
+    ════════════════════════════════════════════ */
+    .rewards {
+      background: var(--bg-light);
+      padding: var(--section-pad) 0;
+    }
+    .rewards-inner {
+      background: radial-gradient(ellipse at 50% 30%, rgba(212,132,26,0.07) 0%, transparent 65%);
+    }
+    .rewards .section-tag { color: var(--amber-dark); }
+    .rewards .section-title { color: var(--ink); }
+    .rewards .section-title em { color: var(--amber-dark); }
+    .rewards .section-sub { color: var(--muted-light); }
+    .rewards-content {
+      max-width: 620px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .rewards-form { margin-top: 2rem; }
+    .rewards-form-inner {
+      display: flex;
+      gap: 0.6rem;
+      max-width: 420px;
+      margin: 0 auto 0.75rem;
+    }
+    @media (max-width: 480px) { .rewards-form-inner { flex-direction: column; } }
+    .rewards-input {
+      flex: 1;
+      padding: 0.85rem 1.2rem;
+      background: #fff;
+      border: 1px solid rgba(15,15,15,0.15);
+      border-radius: 2px;
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      color: var(--ink);
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    .rewards-input:focus { border-color: var(--amber); }
+    .rewards-btn { white-space: nowrap; }
+    .rewards-fine {
+      font-size: 0.65rem;
+      color: var(--muted-light);
+      letter-spacing: 0.05em;
+    }
+    .rewards-success {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-style: italic;
+      color: var(--amber-dark);
+      padding: 1rem 0;
+      text-align: center;
+    }
+    .rewards-badges {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      margin-top: 2.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(15,15,15,0.1);
+    }
+    @media (max-width: 480px) { .rewards-badges { gap: 1.5rem; } }
+    .rewards-badge { text-align: center; }
+    .badge-num {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--amber-dark);
+      line-height: 1;
+    }
+    .badge-label {
+      display: block;
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.3rem;
+    }
+
+    /* ════════════════════════════════════════════
+       FOOTER
+    ════════════════════════════════════════════ */
+    .footer { background: #080808; padding: 5rem 0 2rem; }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 5rem;
+      margin-bottom: 4rem;
+      padding-bottom: 4rem;
+      border-bottom: 1px solid var(--line-dark);
+    }
+    @media (max-width: 768px) {
+      .footer-top { grid-template-columns: 1fr; gap: 3rem; }
+    }
+    .footer-logo {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-style: italic;
+      font-weight: 600;
+      color: var(--cream);
+      margin-bottom: 0.5rem;
+    }
+    .footer-logo span { color: var(--amber); }
+    .footer-tagline {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+    .footer-socials { display: flex; gap: 1rem; }
+    .footer-social-link {
+      width: 36px; height: 36px;
+      border: 1px solid var(--line-dark);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.25s, background 0.25s;
+    }
+    .footer-social-link:hover { border-color: var(--amber); background: var(--amber-glow); }
+    .footer-social-link svg { width: 15px; height: 15px; stroke: var(--cream-dim); fill: none; stroke-width: 1.5; }
+    .footer-nav {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+    @media (max-width: 480px) { .footer-nav { grid-template-columns: 1fr 1fr; } }
+    .footer-col-title {
+      font-size: 0.58rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 1rem;
+    }
+    .footer-col ul { display: flex; flex-direction: column; gap: 0.65rem; }
+    .footer-col a {
+      font-size: 0.8rem;
+      color: var(--cream-dim);
+      transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--cream); }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .footer-copy {
+      font-size: 0.65rem;
+      color: var(--cream-faint);
+      letter-spacing: 0.05em;
+    }
+    .footer-legal { display: flex; gap: 1.5rem; }
+    .footer-legal a {
+      font-size: 0.65rem;
+      color: var(--cream-faint);
+      transition: color 0.2s;
+    }
+    .footer-legal a:hover { color: var(--cream-dim); }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAV ── -->
+  <nav class="nav" id="navbar" role="navigation" aria-label="Main navigation">
+    <a href="index.html" class="nav-logo">
+      Mighty&nbsp;<span class="logo-thunder">Thunder</span><span class="logo-kitchen">Kitchen</span>
+    </a>
+    <ul class="nav-links" role="list">
+      <li><a href="menu.html">Menu</a></li>
+      <li><a href="#catering">Catering</a></li>
+      <li><a href="#rewards">Rewards</a></li>
+      <li><a href="#">Locations</a></li>
+      <li><a href="#" class="nav-cta">Order Now</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile navigation">
+    <a href="menu.html"  class="mobile-link">Menu</a>
+    <a href="#catering"  class="mobile-link">Catering</a>
+    <a href="#rewards"   class="mobile-link">Rewards</a>
+    <a href="#"          class="mobile-link">Locations</a>
+    <a href="#"          class="mobile-link">Order Now</a>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <section class="hero" id="hero" aria-label="Hero">
+    <div class="hero-layer" id="hlBg"></div>
+    <div class="hero-layer" id="hlMid"></div>
+    <div class="hero-layer" id="hlContent">
+      <p class="hero-eyebrow">Fresh &middot; Fast &middot; Bold &middot; Since 2018</p>
+      <h1 class="hero-title">
+        Mighty<br><em>Thunder</em><br>Kitchen
+      </h1>
+      <div class="hero-divider"></div>
+      <p class="hero-sub">Stir-Fry &middot; Salads &middot; Thunder Bowls &middot; Honeybars</p>
+      <div class="hero-cta">
+        <a href="menu.html" class="btn-primary">Explore the Menu</a>
+        <a href="#how-it-works" class="btn-outline">How It Works</a>
+      </div>
+    </div>
+    <div class="scroll-indicator" aria-hidden="true">
+      <div class="scroll-line"></div>
+      <span class="scroll-text">Scroll</span>
+    </div>
+  </section>
+
+  <!-- ── TAGLINE STRIP ── -->
+  <div class="tagline-strip" aria-hidden="true">
+    <div class="tagline-track">
+      <span>Fresh.</span><span class="sep">&bull;</span>
+      <span>Fast.</span><span class="sep">&bull;</span>
+      <span>Mighty.</span><span class="sep">&bull;</span>
+      <span>Made to Order.</span><span class="sep">&bull;</span>
+      <span>Fresh.</span><span class="sep">&bull;</span>
+      <span>Fast.</span><span class="sep">&bull;</span>
+      <span>Mighty.</span><span class="sep">&bull;</span>
+      <span>Made to Order.</span><span class="sep">&bull;</span>
+      <span>Fresh.</span><span class="sep">&bull;</span>
+      <span>Fast.</span><span class="sep">&bull;</span>
+      <span>Mighty.</span><span class="sep">&bull;</span>
+      <span>Made to Order.</span><span class="sep">&bull;</span>
+    </div>
+  </div>
+
+  <!-- ── FEATURED ITEMS ── -->
+  <section class="section featured" id="featured">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-tag reveal">Our Signatures</p>
+        <h2 class="section-title reveal">Built for<br>Bold Flavors</h2>
+        <p class="section-sub reveal">Choose your base. Layer your proteins and veggies. Finish with our handcrafted sauces. Ready in under 4 minutes.</p>
+      </div>
+      <div class="featured-grid stagger">
+
+        <article class="featured-card reveal-scale">
+          <div class="featured-img-wrap">
+            <img src="https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=800&q=80" alt="Thunderclap Noodles stir-fry bowl" loading="lazy" decoding="async" />
+            <div class="featured-badge">Most Popular</div>
+          </div>
+          <div class="featured-body">
+            <p class="featured-tag">Stir-Fry</p>
+            <h3 class="featured-name">Thunderclap Noodles</h3>
+            <p class="featured-desc">Wheat noodles, charred broccoli, snap peas, mushrooms, tossed in our signature thunder sauce. Choose your protein.</p>
+            <a href="menu.html" class="btn-outline featured-link">Build Yours</a>
+          </div>
+        </article>
+
+        <article class="featured-card reveal-scale">
+          <div class="featured-img-wrap">
+            <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&q=80" alt="Fresh colorful salad bowl" loading="lazy" decoding="async" />
+          </div>
+          <div class="featured-body">
+            <p class="featured-tag">Salad</p>
+            <h3 class="featured-name">Storm Season Salad</h3>
+            <p class="featured-desc">Kale, shredded cabbage, edamame, roasted sesame seeds, crispy wontons, miso ginger dressing.</p>
+            <a href="menu.html" class="btn-outline featured-link">Build Yours</a>
+          </div>
+        </article>
+
+        <article class="featured-card reveal-scale">
+          <div class="featured-img-wrap">
+            <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=80" alt="Thunder Bowl with toppings" loading="lazy" decoding="async" />
+            <div class="featured-badge">New</div>
+          </div>
+          <div class="featured-body">
+            <p class="featured-tag">Thunder Bowl</p>
+            <h3 class="featured-name">Gold Rush Bowl</h3>
+            <p class="featured-desc">Jasmine rice, roasted sweet potato, avocado, pickled cucumber, soft-boiled egg, toasted sesame.</p>
+            <a href="menu.html" class="btn-outline featured-link">Build Yours</a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CATERING ── -->
+  <section class="section catering" id="catering">
+    <div class="container">
+      <div class="catering-grid">
+        <div class="catering-img-wrap reveal-left">
+          <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80" alt="Catering spread for an event" loading="lazy" decoding="async" />
+        </div>
+        <div class="catering-text reveal-right">
+          <p class="section-tag">Catering</p>
+          <h2 class="section-title">Feed the Team.<br><em>Impress Everyone.</em></h2>
+          <p>Mighty Thunder Kitchen caters corporate lunches, private events, and team celebrations. Custom builds, individually packaged, always made fresh.</p>
+          <ul class="catering-bullets">
+            <li>Minimum 10 guests — scales to 500+</li>
+            <li>Fully customizable dietary options</li>
+            <li>Same-week booking available</li>
+            <li>Delivery or on-site setup</li>
+          </ul>
+          <a href="#" class="btn-primary">Request Catering</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── HOW IT WORKS ── -->
+  <section class="section how-it-works" id="how-it-works">
+    <div class="container">
+      <div class="section-header" style="text-align:center">
+        <p class="section-tag reveal">The Process</p>
+        <h2 class="section-title reveal">Three Steps to Mighty</h2>
+      </div>
+      <div class="steps-grid stagger">
+
+        <div class="step-card reveal">
+          <div class="step-num" aria-hidden="true">01</div>
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg>
+          </div>
+          <h3 class="step-title">Choose Your Base</h3>
+          <p class="step-desc">Rice noodles, wheat noodles, fresh salad greens, or a Thunder Bowl base. Every bowl starts with your foundation.</p>
+        </div>
+
+        <div class="step-card reveal">
+          <div class="step-num" aria-hidden="true">02</div>
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <h3 class="step-title">Build It Your Way</h3>
+          <p class="step-desc">Pick your proteins, add seasonal veggies, choose from 12 handcrafted sauces. Every combination is made to order.</p>
+        </div>
+
+        <div class="step-card reveal">
+          <div class="step-num" aria-hidden="true">03</div>
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          </div>
+          <h3 class="step-title">Enjoy the Thunder</h3>
+          <p class="step-desc">Ready in under 4 minutes. Fresh, hot, and exactly how you built it. Every. Single. Time.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── REWARDS ── -->
+  <section class="section rewards" id="rewards">
+    <div class="rewards-inner">
+      <div class="container">
+        <div class="rewards-content reveal-scale">
+          <p class="section-tag">Mighty Rewards</p>
+          <h2 class="section-title">Earn Thunder<br><em>On Every Bowl</em></h2>
+          <p class="section-sub" style="margin: 0 auto 2rem;">Join Mighty Rewards and earn points with every order. Redeem for free meals, exclusive drops, and early access to seasonal bowls.</p>
+          <form class="rewards-form" novalidate>
+            <div class="rewards-form-inner">
+              <input
+                type="email"
+                class="rewards-input"
+                placeholder="your@email.com"
+                aria-label="Email address"
+              />
+              <button type="submit" class="btn-primary rewards-btn">Join Free</button>
+            </div>
+            <p class="rewards-fine">No credit card needed. Unsubscribe anytime.</p>
+            <div class="rewards-success" hidden>Thanks! Welcome to the Thunder crew. 🎉</div>
+          </form>
+          <div class="rewards-badges stagger">
+            <div class="rewards-badge reveal-scale">
+              <span class="badge-num">500+</span>
+              <span class="badge-label">Active Members</span>
+            </div>
+            <div class="rewards-badge reveal-scale">
+              <span class="badge-num">Free</span>
+              <span class="badge-label">Bowl at Signup</span>
+            </div>
+            <div class="rewards-badge reveal-scale">
+              <span class="badge-num">2&times;</span>
+              <span class="badge-label">Points on Tuesdays</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="footer-logo">Mighty <span>Thunder</span> Kitchen</div>
+          <p class="footer-tagline">Fresh. Fast. Mighty.</p>
+          <div class="footer-socials">
+            <a href="#" class="footer-social-link" aria-label="Instagram">
+              <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+            </a>
+            <a href="#" class="footer-social-link" aria-label="TikTok">
+              <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.76a4.85 4.85 0 01-1.01-.07z"/></svg>
+            </a>
+            <a href="#" class="footer-social-link" aria-label="Facebook">
+              <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+            </a>
+          </div>
+        </div>
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <div class="footer-col">
+            <h4 class="footer-col-title">Eat</h4>
+            <ul>
+              <li><a href="menu.html">Menu</a></li>
+              <li><a href="#catering">Catering</a></li>
+              <li><a href="#">Locations</a></li>
+              <li><a href="#">Gift Cards</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4 class="footer-col-title">Join</h4>
+            <ul>
+              <li><a href="#rewards">Rewards</a></li>
+              <li><a href="#">Careers</a></li>
+              <li><a href="#">Franchise</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4 class="footer-col-title">Company</h4>
+            <ul>
+              <li><a href="#">Our Story</a></li>
+              <li><a href="#">Press</a></li>
+              <li><a href="#">Contact</a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">&copy; 2026 Mighty Thunder Kitchen LLC. All rights reserved.</p>
+        <div class="footer-legal">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Use</a>
+          <a href="#">Accessibility</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
